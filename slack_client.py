@@ -13,6 +13,7 @@ from slack import RTMClient, WebClient
 
 load_dotenv()
 logger = logging.getLogger(__name__)
+sc = None
 
 
 class SlackBotClient:
@@ -25,6 +26,7 @@ class SlackBotClient:
         self.rtm_client = RTMClient(token=token, run_async=True)
         self.id = WebClient(token).api_call('auth.test')['user_id']
         self.start_time = None
+        self.tweets = []
         self.twitter_keywords = []
         self.future = self.rtm_client.start()
         self.commands = {
@@ -166,6 +168,13 @@ class SlackBotClient:
             text=f"Added keyword: {command}"
         )
 
+    def add_tweets(self, tweets):
+        self.tweets = tweets
+
+    def print_tweets(self):
+        if self.tweets:
+            print(self.tweets)
+
 
 def main():
     logging.basicConfig(
@@ -190,7 +199,8 @@ def main():
     with SlackBotClient(os.environ['SLACK_BOT_TOKEN']) as client:
         loop.run_until_complete(asyncio.gather(
             client.connect_to_stream(),
-            print_things()
+            add_tweet_to_bot(client),
+            print_tweets(client)
         ))
 
     uptime = dt.now() - app_start_time
@@ -205,11 +215,20 @@ def main():
     logging.shutdown()
 
 
-async def print_things():
-    await asyncio.sleep(1)
-    print('things')
-    await print_things()
+# We will need a way to check if the bot is still connected,
+# Handle this case with a signal handler in the integration
+async def add_tweet_to_bot(client):
+    tweets = []
+    while True:
+        tweets.append(1)
+        client.add_tweets(tweets)
+        await asyncio.sleep(5)
 
+
+async def print_tweets(client):
+    while True:
+        client.print_tweets()
+        await asyncio.sleep(5)
 
 if __name__ == '__main__':
     main()
