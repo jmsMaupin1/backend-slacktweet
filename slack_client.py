@@ -21,7 +21,7 @@ class SlackBotClient:
         self.rtm_client = RTMClient(token=token, run_async=True)
         self.id = WebClient(token).api_call('auth.test')['user_id']
         self.start_time = None
-        RTMClient.run_on(event="message")(self.read_message)
+        self.twitter_keywords = []
         self.future = self.rtm_client.start()
         self.commands = {
             "help": {
@@ -39,29 +39,18 @@ class SlackBotClient:
             "quit": {
                 "help": "Shutdown the bot",
                 "func": lambda cmd, chan, wc: self.exit_bot(chan, wc)
+            },
+            "list": {
+                "help": "List current Twitter filters and counts",
+                "func": lambda cmd, chan, wc: self.list_tweet_filters(chan, wc)
+            },
+            "add": {
+                "help": "Add some twitter keyword filter",
+                "func": lambda cmd, chan, wc: self.add_tweet_filter(
+                    cmd, chan, wc)
             }
         }
         self.commands_old = [
-            {
-                "command": "help",
-                "help": "Shows this helpful command reference"
-            },
-            {
-                "command": "ping",
-                "help": "Show uptime of the bot"
-            },
-            {
-                "command": "exit",
-                "help": "Shutdown the bot"
-            },
-            {
-                "command": "quit",
-                "help": "Shutdown the bot"
-            },
-            {
-                "command": "list",
-                "help": "List current Twitter filters and counts"
-            },
             {
                 "command": "add",
                 "help": "Add some twitter keyword filter"
@@ -79,6 +68,8 @@ class SlackBotClient:
                 "help": "Manually raise an exception"
             }
         ]
+
+        RTMClient.run_on(event="message")(self.read_message)
 
     def __enter__(self):
         return self
@@ -103,13 +94,15 @@ class SlackBotClient:
             self.handle_command(matches.group(2).strip(), channel, web_client)
 
     def handle_command(self, command, channel, web_client):
+        cmd = command.split(' ')
         if command in self.commands:
-            self.commands[command]['func'](command, channel, web_client)
+            self.commands[command]['func']("", channel, web_client)
+        elif cmd[0] in self.commands:
+            self.commands[cmd[0]]['func'](cmd[1], channel, web_client)
 
     def send_help_message(self, channel, web_client):
         help_s = '```\n'
         for cmd in self.commands:
-            print(cmd)
             help_s += f"{cmd}: {self.commands[cmd]['help']}\n"
         help_s += '```'
 
@@ -131,6 +124,27 @@ class SlackBotClient:
             text=":( Bot powering down"
         )
         self.rtm_client.stop()
+
+    def list_tweet_filters(self, channel, web_client):
+        keywords = ""
+        for keyword in self.twitter_keywords:
+            keywords += f"{keyword}\n"
+
+        keywords = "Keywords:\n" + keywords if keywords else ""
+
+        print(keywords)
+        web_client.chat_postMessage(
+            channel=channel,
+            text=keywords if keywords else "No keywords added yet"
+        )
+
+    def add_tweet_filter(self, command, channel, web_client):
+        self.twitter_keywords.append(command)
+
+        web_client.chat_postMessage(
+            channel=channel,
+            text=f"Added keyword: {command}"
+        )
 
 
 def main():
