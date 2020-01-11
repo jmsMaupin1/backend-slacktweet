@@ -31,6 +31,14 @@ class SlackBotClient:
             "ping": {
                 "help": "Show uptime of the bot",
                 "func": lambda cmd, chan, wc: self.send_ping_message(chan, wc)
+            },
+            "exit": {
+                "help": "Shutdown the bot",
+                "func": lambda cmd, chan, wc: self.exit_bot(chan, wc)
+            },
+            "quit": {
+                "help": "Shutdown the bot",
+                "func": lambda cmd, chan, wc: self.exit_bot(chan, wc)
             }
         }
         self.commands_old = [
@@ -116,6 +124,13 @@ class SlackBotClient:
             channel=channel,
             text=f"Bot has been active for: {up_time}"
         )
+
+    def exit_bot(self, channel, web_client):
+        web_client.chat_postMessage(
+            channel=channel,
+            text=":( Bot powering down"
+        )
+        self.rtm_client.stop()
 
 
 def main():
