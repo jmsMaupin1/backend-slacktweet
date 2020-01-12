@@ -28,6 +28,19 @@ class TwitterClient(tweepy.StreamListener):
         self.stream = tweepy.Stream(auth=self.api.auth, listener=self)
         self.start_time = dt.now()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, err_type, value, traceback):
+        print(
+            '----------------------------\n'
+            f'Type: {err_type}\n'
+            f'Value: {value}\n'
+            f'Traceback: {traceback}\n'
+            '----------------------------\n'
+        )
+        return
+
     def create_api(self):
         """Logs into the twitter api"""
         try:
@@ -47,15 +60,16 @@ class TwitterClient(tweepy.StreamListener):
     def close_stream(self):
         """Disconnects from the twitter stream"""
         self.stream.disconnect()
-        pass
 
     def restart_stream(self):
         """Restarts the twitter stream"""
-        pass
+        self.close_stream()
+        self.start_stream()
 
-    def update_filters(self):
+    def update_filters(self, filters):
         """Updates filters for the twitter stream, then restarts the stream"""
-        pass
+        self.filters = filters
+        self.restart_stream()
 
     def on_status(self, status):
         """
@@ -68,10 +82,25 @@ class TwitterClient(tweepy.StreamListener):
 
 
 def main():
-    client = TwitterClient(['python', 'trump', 'republicans'])
-    client.start_stream()
-    time.sleep(5)
-    client.close_stream()
+    # Doesn't work
+    # something about context manager im not quite understanding
+    with TwitterClient(['asldfkjasdlfkjsdlfaj']) as tclient:
+        tclient.start_stream()
+        time.sleep(1)
+        tclient.close_stream()
+
+    # works
+    # tclient = TwitterClient(['asldfkjsaldfsldfj'])
+    # tclient.start_stream()
+    # time.sleep(1)
+    # tclient.close_stream()
+
+    # works
+    # t_client = TwitterClient(['asdfasdfsfd aslkdjfaskdf l'])
+    # stream = tweepy.Stream(t_client.api.auth, t_client)
+    # stream.filter(['alskdfjasdkfjsdfj'])
+    # time.sleep(1)
+    # stream.disconnect()
 
 
 if __name__ == '__main__':
