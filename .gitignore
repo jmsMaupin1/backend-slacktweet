@@ -5,3 +5,4 @@ venv/
 *.code-workspace
 *.log
 .todo
+slack_clientv2.py

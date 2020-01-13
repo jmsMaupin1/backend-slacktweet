@@ -78,6 +78,7 @@ class TwitterClient(tweepy.StreamListener):
         self.restart_stream()
 
     def get_tweets(self):
+        """Returns a list of tweets and emptys tweets list"""
         return_tweets = self.tweets
         self.tweets = []
         return return_tweets
@@ -93,9 +94,12 @@ class TwitterClient(tweepy.StreamListener):
         self.tweets.append(status.text)
 
     def on_error(self, error):
+        """Exit stream if we are rate limited, otherwise continue"""
         if error == 420:
             logger.error('Rate limited, try again later')
             return False
+
+        logger.error(f"Unhandled Error: {error}")
 
 
 def main():

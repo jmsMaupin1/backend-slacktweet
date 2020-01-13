@@ -8,8 +8,8 @@ flake8 = "*"
 
 [packages]
 python-dotenv = "*"
-slackclient = "*"
 tweepy = "*"
+slackclient = "*"
 
 [requires]
 python_version = "3.7"

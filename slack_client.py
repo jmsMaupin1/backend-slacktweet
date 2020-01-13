@@ -5,7 +5,6 @@ see https://slack.dev/python-slackclient/
 import os
 import re
 import logging
-import asyncio
 from datetime import datetime as dt
 
 from dotenv import load_dotenv
@@ -13,7 +12,6 @@ from slack import RTMClient, WebClient
 
 load_dotenv()
 logger = logging.getLogger(__name__)
-sc = None
 
 
 class SlackBotClient:
@@ -23,62 +21,56 @@ class SlackBotClient:
     """
 
     def __init__(self, token):
-        self.rtm_client = RTMClient(token=token, run_async=True)
+        self.rtm_client = RTMClient(token=token)
         self.id = WebClient(token).api_call('auth.test')['user_id']
         self.start_time = None
-        self.tweets = []
-        self.twitter_keywords = []
-        self.future = self.rtm_client.start()
-        self.commands = {
-            "help": {
-                "help": "Shows this helpful command reference",
-                "func": lambda cmd, chan, wc: self.send_help_message(chan, wc)
-            },
-            "ping": {
-                "help": "Show uptime of the bot",
-                "func": lambda cmd, chan, wc: self.send_ping_message(chan, wc)
-            },
-            "exit": {
-                "help": "Shutdown the bot",
-                "func": lambda cmd, chan, wc: self.exit_bot(chan, wc)
-            },
-            "quit": {
-                "help": "Shutdown the bot",
-                "func": lambda cmd, chan, wc: self.exit_bot(chan, wc)
-            },
-            "list": {
-                "help": "List current Twitter filters and counts",
-                "func": lambda cmd, chan, wc: self.list_tweet_filters(chan, wc)
-            },
-            "add": {
-                "help": "Add some twitter keyword filter",
-                "func": lambda cmd, chan, wc: self.add_tweet_filter(
-                    cmd, chan, wc)
-            }
-        }
-
+        self.up_time = None
+        self.command_callback = None
+        self.commands = {}
         RTMClient.run_on(event="message")(self.read_message)
 
     def __enter__(self):
         return self
 
-    def __exit__(self, a, b, c):
-        logger.debug('exiting')
+    def __exit__(self, err_type, value, traceback):
+        self.rtm_client.stop()
 
-    def connect_to_stream(self):
+    def start_stream(self):
         """
-        Returns the future to start the client loop outside of the class
-        that way we can interject another coroutine to allow us to do other
-        things inside the slack event loop
+        Starts the stream to listen for commands to the bot
         """
         self.start_time = dt.now()
-        return self.future
+        self.rtm_client.start()
+
+    def add_command(self, command, help_str):
+        """Adds commands to listen for and a help message"""
+        self.commands[command] = help_str
+
+    def add_command_callback(self, callback):
+        """
+        Registers a callback to be called when a known command is received
+        """
+        self.command_callback = callback
+
+    def handle_command(self, command, channel, web_client):
+        """Takes a command and calls the callback funcion appropriately"""
+        cmd = command.split(' ')
+        if self.command_callback:
+            if command in self.commands:
+                self.command_callback(self, command, '', channel, web_client)
+            elif cmd[0] in self.commands:
+                self.command_callback(
+                    self,
+                    cmd[0],
+                    cmd[1],
+                    channel,
+                    web_client
+                )
 
     def read_message(self, **kwargs):
         """
-        Called when RTMClient receieves a message type event makes sure the
-        message is directed at our bot then sends the command off to the
-        command handler
+        Reads and parses the message for a direct mention,
+        Then if it finds a direct mention passes it to the command handler
         """
         data = kwargs['data']
         web_client = kwargs['web_client']
@@ -90,30 +82,16 @@ class SlackBotClient:
         if matches and matches.group(1) == self.id:
             self.handle_command(matches.group(2).strip(), channel, web_client)
 
-    def handle_command(self, command, channel, web_client):
-        """
-        this is where our command is actually executed, we first look to see
-        if a command is in self.commands, this will be true if its a command
-        that requires no input. (@BestSlackBot list)
+    def close_stream(self):
+        self.__exit__(None, None, None)
 
-        If its not then we are checking to see if it is a command that requires
-        input (@BestSlackBot add <keyword>) and if so send that command off with
-        its correct input
-        """
-        cmd = command.split(' ')
-        if command in self.commands:
-            self.commands[command]['func']("", channel, web_client)
-        elif cmd[0] in self.commands:
-            self.commands[cmd[0]]['func'](cmd[1], channel, web_client)
 
-    def send_help_message(self, channel, web_client):
-        """
-        Construct a help message from available commands, then send them as a
-        message to the channel where it was requested from
-        """
+def slackbot_callback(client, command, data, channel, web_client):
+    """Callback method to handle commands emitted by the slackbot client"""
+    if command == 'help':
         help_s = '```\n'
-        for cmd in self.commands:
-            help_s += f"{cmd}: {self.commands[cmd]['help']}\n"
+        for cmd in client.commands:
+            help_s += f"{cmd}: {client.commands[cmd]}\n"
         help_s += '```'
 
         web_client.chat_postMessage(
@@ -121,114 +99,28 @@ class SlackBotClient:
             text=help_s
         )
 
-    def send_ping_message(self, channel, web_client):
-        """
-        Send a message about current uptime of the bot
-        """
-        up_time = dt.now() - self.start_time
-        web_client.chat_postMessage(
-            channel=channel,
-            text=f"Bot has been active for: {up_time}"
-        )
 
-    def exit_bot(self, channel, web_client):
-        """
-        Disconnects the RTMClient from the slack server
-        """
-        web_client.chat_postMessage(
-            channel=channel,
-            text=":( Bot powering down"
-        )
-        self.rtm_client.stop()
-
-    def list_tweet_filters(self, channel, web_client):
-        """
-        Gathers a list of current twitter keyword filters and sends them
-        to a given channel
-        """
-        keywords = ""
-        for keyword in self.twitter_keywords:
-            keywords += f"{keyword}\n"
-
-        keywords = "Keywords:\n" + keywords if keywords else ""
-
-        web_client.chat_postMessage(
-            channel=channel,
-            text=keywords if keywords else "No keywords added yet"
-        )
-
-    def add_tweet_filter(self, command, channel, web_client):
-        """
-        adds a given filter word to search tweets by
-        """
-        self.twitter_keywords.append(command)
-
-        web_client.chat_postMessage(
-            channel=channel,
-            text=f"Added keyword: {command}"
-        )
-
-    def add_tweets(self, tweets):
-        self.tweets = tweets
-
-    def print_tweets(self):
-        if self.tweets:
-            print(self.tweets)
+commands = {
+    "help": "Prints a helpful message",
+    "ping": "Show uptime of this bot",
+    "exit": "Shutdown this bot",
+    "quit": "Shutdown this bot",
+    "list": "list current twitter filters and counters",
+    "add": "add some twitter keyword filters",
+    "del": "Remove some twitter keyword filters",
+    "clear": "Remove all twitter filters",
+    "raise": "Manually test exception handler"
+}
 
 
 def main():
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(process)d - %(asctime)s - %(levelname)s - %(message)s',
-        datefmt='%y-%m-%d %H:%M:%S'
-    )
+    with SlackBotClient(os.environ['SLACK_BOT_TOKEN']) as sc:
+        for cmd in commands:
+            sc.add_command(cmd, commands[cmd])
 
-    app_start_time = dt.now()
+        sc.add_command_callback(slackbot_callback)
+        sc.start_stream()
 
-    logging.info(
-        '\n'
-        '--------------------------------------------------\n'
-        '      Running: {}\n'
-        '      started on: {}\n'
-        '--------------------------------------------------\n'
-        .format(__file__, app_start_time.isoformat())
-    )
-
-    loop = asyncio.get_event_loop()
-
-    with SlackBotClient(os.environ['SLACK_BOT_TOKEN']) as client:
-        loop.run_until_complete(asyncio.gather(
-            client.connect_to_stream(),
-            add_tweet_to_bot(client),
-            print_tweets(client)
-        ))
-
-    uptime = dt.now() - app_start_time
-    logging.info(
-        '\n'
-        '--------------------------------------------------\n'
-        '      Running: {}\n'
-        '      stopped on: {}\n'
-        '--------------------------------------------------\n'
-        .format(__file__, str(uptime))
-    )
-    logging.shutdown()
-
-
-# We will need a way to check if the bot is still connected,
-# Handle this case with a signal handler in the integration
-async def add_tweet_to_bot(client):
-    tweets = []
-    while True:
-        tweets.append(1)
-        client.add_tweets(tweets)
-        await asyncio.sleep(5)
-
-
-async def print_tweets(client):
-    while True:
-        client.print_tweets()
-        await asyncio.sleep(5)
 
 if __name__ == '__main__':
     main()
