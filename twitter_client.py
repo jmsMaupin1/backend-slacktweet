@@ -28,6 +28,7 @@ class TwitterClient(tweepy.StreamListener):
         self.filters = filters
         self.tweets = []
         self.api = self.create_api()
+        self.callback = None
         self.stream = tweepy.Stream(
             auth=self.api.auth,
             listener=self,
@@ -83,6 +84,9 @@ class TwitterClient(tweepy.StreamListener):
         self.tweets = []
         return return_tweets
 
+    def add_callback(self, callback):
+        self.callback = callback
+
     def on_status(self, status):
         """
         Takes events from twitter, filters out retweets then adds
@@ -91,7 +95,9 @@ class TwitterClient(tweepy.StreamListener):
         if 'retweeted_status' in status.__dict__:
             return
         logger.info(status.text)
-        self.tweets.append(status.text)
+
+        if self.callback:
+            self.callback(self, status.text)
 
     def on_error(self, error):
         """Exit stream if we are rate limited, otherwise continue"""

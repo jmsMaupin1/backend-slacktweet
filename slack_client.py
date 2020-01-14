@@ -5,6 +5,7 @@ see https://slack.dev/python-slackclient/
 import os
 import re
 import logging
+import signal
 from datetime import datetime as dt
 
 from dotenv import load_dotenv
@@ -12,6 +13,11 @@ from slack import RTMClient, WebClient
 
 load_dotenv()
 logger = logging.getLogger(__name__)
+
+sig_dict = dict(
+    (k, v) for v, k in reversed(sorted(signal.__dict__.items()))
+    if v.startswith('SIG') and not v.startswith('SIG_')
+)
 
 
 class SlackBotClient:
@@ -92,6 +98,14 @@ class SlackBotClient:
 
         if matches and matches.group(1) == self.id:
             self.handle_command(matches.group(2).strip(), channel, web_client)
+
+    def signal_handler(self, sig_num, frame):
+        logger.warn(
+            'Received OS process signal: {}'
+            .format(sig_dict[sig_num])
+        )
+
+        self.close_stream()
 
     def close_stream(self):
         self.__exit__(None, None, None)
