@@ -110,6 +110,9 @@ def main():
             loop.create_task(sc.start_stream())
             loop.create_task(tc.start_stream())
 
+            # Works sometimes but causes an exception
+            signal.signal(signal.SIGINT, tc.signal_handler)
+
             # Not being called
             signal.signal(signal.SIGINT, lambda s, l: print('\n\n\n\nSIGINT\n\n\n\n'))
 
@@ -120,7 +123,7 @@ def main():
                     signal_handler
                 )
 
-            # Twitter client shuts down slack doesnt seem to
+            # Slack client shuts down but the twitter client doesnt seem to
             try:
                 loop.run_forever()
             except KeyboardInterrupt:
