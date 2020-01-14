@@ -28,6 +28,7 @@ class SlackBotClient:
         self.command_callback = None
         self.commands = {}
         RTMClient.run_on(event="message")(self.read_message)
+        RTMClient.run_on(event="channel_joined")(self.channel_joined)
 
     def __enter__(self):
         return self
@@ -41,6 +42,16 @@ class SlackBotClient:
         """
         self.start_time = dt.now()
         self.rtm_client.start()
+
+    def channel_joined(self, **kwargs):
+        """When joining a channel emit a hello message"""
+        web_client = kwargs['web_client']
+        channel = kwargs['data']['channel']
+
+        web_client.chat_postMessage(
+            channel=channel['id'],
+            text="Whats up party people!"
+        )
 
     def add_command(self, command, help_str):
         """Adds commands to listen for and a help message"""
@@ -114,12 +125,39 @@ commands = {
 
 
 def main():
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(process)d - %(asctime)s - %(levelname)s - %(message)s',
+        datefmt='%y-%m-%d %H:%M:%S'
+    )
+
+    app_start_time = dt.now()
+    logging.info(
+        '\n'
+        '--------------------------------------------------\n'
+        '      Running: {}\n'
+        '      started on: {}\n'
+        '--------------------------------------------------\n'
+        .format(__file__, app_start_time.isoformat())
+    )
+
     with SlackBotClient(os.environ['SLACK_BOT_TOKEN']) as sc:
         for cmd in commands:
             sc.add_command(cmd, commands[cmd])
 
         sc.add_command_callback(slackbot_callback)
         sc.start_stream()
+
+    uptime = dt.now() - app_start_time
+    logging.info(
+        '\n'
+        '--------------------------------------------------\n'
+        '      Running: {}\n'
+        '      stopped on: {}\n'
+        '--------------------------------------------------\n'
+        .format(__file__, str(uptime))
+    )
+    logging.shutdown()
 
 
 if __name__ == '__main__':

@@ -90,7 +90,7 @@ class TwitterClient(tweepy.StreamListener):
         """
         if 'retweeted_status' in status.__dict__:
             return
-
+        logger.info(status.text)
         self.tweets.append(status.text)
 
     def on_error(self, error):
