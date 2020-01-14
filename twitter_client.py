@@ -43,6 +43,7 @@ class TwitterClient(tweepy.StreamListener):
         self.start_time = dt.now()
 
     def __enter__(self):
+        self.start_stream()
         return self
 
     def __exit__(self, err_type, value, traceback):
@@ -62,7 +63,7 @@ class TwitterClient(tweepy.StreamListener):
         """Starts monitering twitter stream for filtered tweets"""
         try:
             logger.debug("Starting Twitter Stream")
-            return self.stream.filter(track=self.filters)
+            self.stream.filter(track=self.filters, is_async=True)
         except Exception as e:
             logger.error(f"Failed to start stream: {e}")
 

@@ -5,7 +5,6 @@ see https://slack.dev/python-slackclient/
 import os
 import re
 import logging
-import signal
 import time
 from datetime import datetime as dt
 
@@ -14,11 +13,6 @@ from slack import RTMClient, WebClient
 
 load_dotenv()
 logger = logging.getLogger(__name__)
-
-sig_dict = dict(
-    (k, v) for v, k in reversed(sorted(signal.__dict__.items()))
-    if v.startswith('SIG') and not v.startswith('SIG_')
-)
 
 
 class SlackClient:
@@ -29,28 +23,23 @@ class SlackClient:
 
     def __init__(self):
         token = os.environ['SLACK_BOT_TOKEN']
-        self.rtm_client = RTMClient(token=token)
+        self.rtm_client = RTMClient(token=token, run_async=True)
         self.web_client = WebClient(token)
         self.id = self.web_client.api_call('auth.test')['user_id']
+        self.future = self.rtm_client.start()
         self.start_time = None
-        self.up_time = None
         self.command_callback = None
         self.commands = {}
         RTMClient.run_on(event="message")(self.read_message)
         RTMClient.run_on(event="channel_joined")(self.channel_joined)
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, err_type, value, traceback):
-        self.rtm_client.stop()
-
-    async def start_stream(self):
+    def start_stream(self):
         """
         Starts the stream to listen for commands to the bot
         """
         self.start_time = dt.now()
-        await self.rtm_client.start()
+        loop = self.future.get_loop()
+        loop.run_until_complete(self.future)
 
     def channel_joined(self, **kwargs):
         """When joining a channel emit a hello message"""
@@ -66,7 +55,7 @@ class SlackClient:
         """Adds commands to listen for and a help message"""
         self.commands[command] = help_str
 
-    def add_command_callback(self, callback):
+    def add_callback(self, callback):
         """
         Registers a callback to be called when a known command is received
         """
@@ -103,17 +92,6 @@ class SlackClient:
         if matches and matches.group(1) == self.id:
             self.handle_command(matches.group(2).strip(), channel, web_client)
 
-    def signal_handler(self, sig_num, frame):
-        logger.warn(
-            'Received OS process signal: {}'
-            .format(sig_dict[sig_num])
-        )
-
-        self.close_stream()
-
-    def close_stream(self):
-        self.__exit__(None, None, None)
-
     def private_message_jt(self, text):
         try:
             self.web_client.chat_postMessage(
@@ -123,70 +101,3 @@ class SlackClient:
             time.sleep(1)
         except Exception as e:
             logger.error(f" Slack - Unhandled Exception: {e}")
-
-
-def slackbot_callback(client, command, data, channel, web_client):
-    """Callback method to handle commands emitted by the slackbot client"""
-    if command == 'help':
-        help_s = '```\n'
-        for cmd in client.commands:
-            help_s += f"{cmd}: {client.commands[cmd]}\n"
-        help_s += '```'
-
-        web_client.chat_postMessage(
-            channel=channel,
-            text=help_s
-        )
-
-
-commands = {
-    "help": "Prints a helpful message",
-    "ping": "Show uptime of this bot",
-    "exit": "Shutdown this bot",
-    "quit": "Shutdown this bot",
-    "list": "list current twitter filters and counters",
-    "add": "add some twitter keyword filters",
-    "del": "Remove some twitter keyword filters",
-    "clear": "Remove all twitter filters",
-    "raise": "Manually test exception handler"
-}
-
-
-def main():
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(process)d - %(asctime)s - %(levelname)s - %(message)s',
-        datefmt='%y-%m-%d %H:%M:%S'
-    )
-
-    app_start_time = dt.now()
-    logging.info(
-        '\n'
-        '--------------------------------------------------\n'
-        '      Running: {}\n'
-        '      started on: {}\n'
-        '--------------------------------------------------\n'
-        .format(__file__, app_start_time.isoformat())
-    )
-
-    with SlackClient() as sc:
-        for cmd in commands:
-            sc.add_command(cmd, commands[cmd])
-
-        sc.add_command_callback(slackbot_callback)
-        sc.start_stream()
-
-    uptime = dt.now() - app_start_time
-    logging.info(
-        '\n'
-        '--------------------------------------------------\n'
-        '      Running: {}\n'
-        '      stopped on: {}\n'
-        '--------------------------------------------------\n'
-        .format(__file__, str(uptime))
-    )
-    logging.shutdown()
-
-
-if __name__ == '__main__':
-    main()

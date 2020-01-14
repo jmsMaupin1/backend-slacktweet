@@ -8,7 +8,6 @@ import asyncio
 import logging
 from datetime import datetime as dt
 
-import nest_asyncio
 from slack_client import SlackClient
 from twitter_client import TwitterClient
 
@@ -17,7 +16,6 @@ sig_dict = dict(
     if v.startswith('SIG') and not v.startswith('SIG_')
 )
 
-nest_asyncio.apply()
 logger = logging.getLogger(__name__)
 
 commands = {
@@ -73,11 +71,6 @@ async def shutdown(sig_num, loop):
     loop.stop()
 
 
-def signal_handler(sig_num, loop):
-    print('\n\nsignal handling and stuff\n\n')
-    return asyncio.create_task(sig_num, loop)
-
-
 def main():
     logging.basicConfig(
         level=logging.DEBUG,
@@ -95,41 +88,15 @@ def main():
         .format(__file__, app_start_time.isoformat())
     )
 
-    loop = asyncio.get_event_loop()
+    with TwitterClient(['test']) as tc:
+        slack_client = SlackClient()
+        for cmd in commands:
+            slack_client.add_command(cmd, commands[cmd])
 
-    with SlackClient() as sc:
-        with TwitterClient(['test']) as tc:
-            for cmd in commands:
-                sc.add_command(cmd, commands[cmd])
+        slack_client.add_callback(slackbot_callback)
+        tc.add_callback(slack_client.private_message_jt)
 
-            sc.add_command_callback(slackbot_callback)
-            tc.add_callback(
-               sc.private_message_jt
-            )
-
-            loop.create_task(sc.start_stream())
-            loop.create_task(tc.start_stream())
-
-            # Works sometimes but causes an exception
-            signal.signal(signal.SIGINT, tc.signal_handler)
-
-            # Not being called
-            signal.signal(signal.SIGINT, lambda s, l: print('\n\n\n\nSIGINT\n\n\n\n'))
-
-            # Signal handler not being called
-            for s in (signal.SIGHUP, signal.SIGINT, signal.SIGTERM):
-                loop.add_signal_handler(
-                    s,
-                    signal_handler
-                )
-
-            # Slack client shuts down but the twitter client doesnt seem to
-            try:
-                loop.run_forever()
-            except KeyboardInterrupt:
-                logger.warn('Keyboard interrupt')
-            finally:
-                loop.close()
+        slack_client.start_stream()
 
     uptime = dt.now() - app_start_time
     logging.info(
