@@ -6,6 +6,7 @@ see https://tweepy.readthedocs.io/en/latest/
 import os
 import time
 import logging
+import signal
 
 from dotenv import load_dotenv
 import tweepy
@@ -18,6 +19,11 @@ TWITTER_ACCESS_TOKEN = os.environ['TWITTER_ACCESS_TOKEN']
 TWITTER_ACCESS_SECRET = os.environ['TWITTER_ACCESS_SECRET']
 
 logger = logging.getLogger(__name__)
+
+sig_dict = dict(
+    (k, v) for v, k in reversed(sorted(signal.__dict__.items()))
+    if v.startswith('SIG') and not v.startswith('SIG_')
+)
 
 
 class TwitterClient(tweepy.StreamListener):
@@ -32,12 +38,11 @@ class TwitterClient(tweepy.StreamListener):
         self.stream = tweepy.Stream(
             auth=self.api.auth,
             listener=self,
-            daemon=True
+            daemon=True,
         )
         self.start_time = dt.now()
 
     def __enter__(self):
-        self.start_stream()
         return self
 
     def __exit__(self, err_type, value, traceback):
@@ -57,7 +62,7 @@ class TwitterClient(tweepy.StreamListener):
         """Starts monitering twitter stream for filtered tweets"""
         try:
             logger.debug("Starting Twitter Stream")
-            self.stream.filter(track=self.filters, is_async=True)
+            return self.stream.filter(track=self.filters)
         except Exception as e:
             logger.error(f"Failed to start stream: {e}")
 
@@ -97,7 +102,15 @@ class TwitterClient(tweepy.StreamListener):
         logger.info(status.text)
 
         if self.callback:
-            self.callback(self, status.text)
+            self.callback(status.text)
+
+    def signal_handler(self, sig_num, frame):
+        logger.warn(
+            'Received OS process signal: {}'
+            .format(sig_dict[sig_num])
+        )
+
+        self.close_stream()
 
     def on_error(self, error):
         """Exit stream if we are rate limited, otherwise continue"""

@@ -6,6 +6,7 @@ import os
 import re
 import logging
 import signal
+import time
 from datetime import datetime as dt
 
 from dotenv import load_dotenv
@@ -20,15 +21,17 @@ sig_dict = dict(
 )
 
 
-class SlackBotClient:
+class SlackClient:
     """
     Creates a slackbot object capable of logging into slack
     and monitoring messages
     """
 
-    def __init__(self, token):
+    def __init__(self):
+        token = os.environ['SLACK_BOT_TOKEN']
         self.rtm_client = RTMClient(token=token)
-        self.id = WebClient(token).api_call('auth.test')['user_id']
+        self.web_client = WebClient(token)
+        self.id = self.web_client.api_call('auth.test')['user_id']
         self.start_time = None
         self.up_time = None
         self.command_callback = None
@@ -42,12 +45,12 @@ class SlackBotClient:
     def __exit__(self, err_type, value, traceback):
         self.rtm_client.stop()
 
-    def start_stream(self):
+    async def start_stream(self):
         """
         Starts the stream to listen for commands to the bot
         """
         self.start_time = dt.now()
-        self.rtm_client.start()
+        await self.rtm_client.start()
 
     def channel_joined(self, **kwargs):
         """When joining a channel emit a hello message"""
@@ -76,6 +79,7 @@ class SlackBotClient:
             if command in self.commands:
                 self.command_callback(self, command, '', channel, web_client)
             elif cmd[0] in self.commands:
+                logger.info(channel)
                 self.command_callback(
                     self,
                     cmd[0],
@@ -91,7 +95,7 @@ class SlackBotClient:
         """
         data = kwargs['data']
         web_client = kwargs['web_client']
-        message = data['text']
+        message = data['text'] if 'text' in data else ''
         channel = data['channel']
 
         matches = re.search(r"^<@(|[WU].+?)>(.*)", message)
@@ -109,6 +113,16 @@ class SlackBotClient:
 
     def close_stream(self):
         self.__exit__(None, None, None)
+
+    def private_message_jt(self, text):
+        try:
+            self.web_client.chat_postMessage(
+                channel='DSD690213',
+                text=text
+            )
+            time.sleep(1)
+        except Exception as e:
+            logger.error(f" Slack - Unhandled Exception: {e}")
 
 
 def slackbot_callback(client, command, data, channel, web_client):
@@ -155,7 +169,7 @@ def main():
         .format(__file__, app_start_time.isoformat())
     )
 
-    with SlackBotClient(os.environ['SLACK_BOT_TOKEN']) as sc:
+    with SlackClient() as sc:
         for cmd in commands:
             sc.add_command(cmd, commands[cmd])
 
