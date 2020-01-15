@@ -87,11 +87,24 @@ def slackbot_callback(client, command, data, channel, web_client, *args):
         filters.append(data)
         twitter_client.update_filters(filters)
 
+    if command == 'del':
+        """Remove a keyword filter from twitter client"""
+        twitter_client = args[0]
+        filters = twitter_client.filters
+        filter_index = filters.index(data)
+        if filter_index >= 0:
+            filters.pop(filter_index)
 
-    # "add": "add some twitter keyword filters",
-    # "del": "Remove some twitter keyword filters"
-    # "clear": "Remove all twitter filters",
-    # "raise": "Manually test exception handler"
+        twitter_client.update_filters(filters)
+
+    if command == 'clear':
+        """Remove all keyword filters from twitter client"""
+        twitter_client = args[0]
+        twitter_client.update_filters([])
+
+    if command == 'raise':
+        client.raise_exception(data, channel)
+
 
 def create_parser():
     logger_levels = " ".join([key for key in log_levels])

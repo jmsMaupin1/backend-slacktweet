@@ -40,8 +40,11 @@ class SlackClient:
         Starts the stream to listen for commands to the bot
         """
         self.start_time = dt.now()
-        loop = self.future.get_loop()
-        loop.run_until_complete(self.future)
+        try:
+            loop = self.future.get_loop()
+            loop.run_until_complete(self.future)
+        except Exception as e:
+            logger.error(f'Unahdled Error: {e}')
 
     def bot_connected(self, **kwargs):
         """Upon connecting to the slack client grab the bot id"""
@@ -60,6 +63,7 @@ class SlackClient:
 
     def get_channel_list(self):
         chan_list = self.web_client.channels_list()
+        print(f'\n\n{chan_list}\n\n')
 
     def add_command(self, command, help_str):
         """Adds commands to listen for and a help message"""
@@ -101,6 +105,25 @@ class SlackClient:
 
         if matches and matches.group(1) == self.id:
             self.handle_command(matches.group(2).strip(), channel, web_client)
+
+    def raise_exception(self, exception, channel):
+        exceptions = {
+            'systemerror': SystemError,
+            'typeerror': TypeError,
+            'unbounderror': UnboundLocalError,
+            'valueerror': ValueError
+        }
+
+        if exception in exceptions:
+            try:
+                raise exceptions[exception]
+            except Exception as e:
+                logger.error(f'Unandled Exception: {e}')
+        else:
+            self.web_client.chat_postMessage(
+                channel=channel,
+                text=f'Possible Exceptions: {" ".join(exceptions.keys())}'
+            )
 
     def private_message_jt(self, text):
         try:
