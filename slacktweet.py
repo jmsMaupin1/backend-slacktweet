@@ -3,18 +3,13 @@
 A Slackbot implementation that integrates Slack and Twitter clients
 together
 """
-import signal
 import asyncio
 import logging
+import argparse
 from datetime import datetime as dt
 
 from slack_client import SlackClient
 from twitter_client import TwitterClient
-
-sig_dict = dict(
-    (k, v) for v, k in reversed(sorted(signal.__dict__.items()))
-    if v.startswith('SIG') and not v.startswith('SIG_')
-)
 
 logger = logging.getLogger(__name__)
 
@@ -54,21 +49,6 @@ def slackbot_callback(client, command, data, channel, web_client):
             channel=channel,
             text=help_s
         )
-
-
-async def shutdown(sig_num, loop):
-    """Shut down service and clean up"""
-    logging.warn('Received force exit signal')
-    tasks = [
-        t for t in asyncio.all_tasks() if t is not asyncio.current_task()
-    ]
-
-    [task.cancel() for task in tasks]
-
-    logging.info(f"cancelling {len(tasks)} outstanding tasks")
-    await asyncio.gather(*tasks, return_exceptions=True)
-    logging.info('finished shuttding down')
-    loop.stop()
 
 
 def main():

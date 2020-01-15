@@ -100,4 +100,4 @@ class SlackClient:
             )
             time.sleep(1)
         except Exception as e:
-            logger.error(f" Slack - Unhandled Exception: {e}")
+            logger.exception(f" Slack - Unhandled Exception: {e}")
