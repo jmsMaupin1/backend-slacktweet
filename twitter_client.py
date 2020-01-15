@@ -6,7 +6,6 @@ see https://tweepy.readthedocs.io/en/latest/
 import os
 import time
 import logging
-import signal
 
 from dotenv import load_dotenv
 import tweepy
@@ -19,11 +18,6 @@ TWITTER_ACCESS_TOKEN = os.environ['TWITTER_ACCESS_TOKEN']
 TWITTER_ACCESS_SECRET = os.environ['TWITTER_ACCESS_SECRET']
 
 logger = logging.getLogger(__name__)
-
-sig_dict = dict(
-    (k, v) for v, k in reversed(sorted(signal.__dict__.items()))
-    if v.startswith('SIG') and not v.startswith('SIG_')
-)
 
 
 class TwitterClient(tweepy.StreamListener):
@@ -61,6 +55,10 @@ class TwitterClient(tweepy.StreamListener):
 
     def start_stream(self):
         """Starts monitering twitter stream for filtered tweets"""
+
+        if not self.filters:
+            return
+
         try:
             logger.debug("Starting Twitter Stream")
             self.stream.filter(track=self.filters, is_async=True)
@@ -104,14 +102,6 @@ class TwitterClient(tweepy.StreamListener):
 
         if self.callback:
             self.callback(status.text)
-
-    def signal_handler(self, sig_num, frame):
-        logger.warn(
-            'Received OS process signal: {}'
-            .format(sig_dict[sig_num])
-        )
-
-        self.close_stream()
 
     def on_error(self, error):
         """Exit stream if we are rate limited, otherwise continue"""

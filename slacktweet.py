@@ -101,7 +101,7 @@ def main():
         .format(__file__, app_start_time.isoformat())
     )
 
-    with TwitterClient(['test']) as tc:
+    with TwitterClient([]) as tc:
         slack_client = SlackClient()
         for cmd in commands:
             slack_client.add_command(cmd, commands[cmd])
