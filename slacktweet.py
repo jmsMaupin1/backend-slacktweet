@@ -25,6 +25,14 @@ commands = {
     "raise": "Manually test exception handler"
 }
 
+log_levels = {
+    "critical": logging.CRITICAL,
+    "error": logging.ERROR,
+    "warning": logging.WARNING,
+    "info": logging.INFO,
+    "debug": logging.DEBUG
+}
+
 
 class ClientInjector(object):
     """Injects a given client into a function"""
@@ -51,9 +59,26 @@ def slackbot_callback(client, command, data, channel, web_client):
         )
 
 
+def create_parser():
+    logger_levels = " ".join([key for key in log_levels])
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '-l', '--loglevel',
+        help=f"Logging level can be: {logger_levels}"
+    )
+    return parser
+
+
 def main():
+    parser = create_parser()
+    args = parser.parse_args()
+
+    if not args.loglevel:
+        parser.print_help()
+        exit(1)
+
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=log_levels[args.loglevel],
         format='%(process)d - %(asctime)s - %(levelname)s - %(message)s',
         datefmt='%y-%m-%d %H:%M:%S',
         handlers=[
