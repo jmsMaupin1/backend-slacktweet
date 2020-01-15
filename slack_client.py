@@ -24,14 +24,15 @@ class SlackClient:
     def __init__(self):
         token = os.environ['SLACK_BOT_TOKEN']
         self.rtm_client = RTMClient(token=token, run_async=True)
-        self.web_client = WebClient(token)
-        self.id = self.web_client.api_call('auth.test')['user_id']
+        self.web_client = None
+        self.id = None
         self.future = self.rtm_client.start()
         self.start_time = None
         self.command_callback = None
         self.commands = {}
         RTMClient.run_on(event="message")(self.read_message)
         RTMClient.run_on(event="channel_joined")(self.channel_joined)
+        RTMClient.run_on(event="hello")(self.bot_connected)
 
     def start_stream(self):
         """
@@ -40,6 +41,11 @@ class SlackClient:
         self.start_time = dt.now()
         loop = self.future.get_loop()
         loop.run_until_complete(self.future)
+
+    def bot_connected(self, **kwargs):
+        """Upon connecting to the slack client grab the bot id"""
+        self.web_client = kwargs['web_client']
+        self.id = self.web_client.api_call('auth.test')['user_id']
 
     def channel_joined(self, **kwargs):
         """When joining a channel emit a hello message"""

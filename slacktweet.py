@@ -3,7 +3,6 @@
 A Slackbot implementation that integrates Slack and Twitter clients
 together
 """
-import asyncio
 import logging
 import argparse
 from datetime import datetime as dt
