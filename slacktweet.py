@@ -48,6 +48,7 @@ class ClientInjector(object):
 def slackbot_callback(client, command, data, channel, web_client):
     """Callback method to handle commands emitted by the slackbot client"""
     if command == 'help':
+        """Prints a list of commands"""
         help_s = '```\n'
         for cmd in client.commands:
             help_s += f"{cmd}: {client.commands[cmd]}\n"
@@ -58,6 +59,25 @@ def slackbot_callback(client, command, data, channel, web_client):
             text=help_s
         )
 
+    if command == 'ping':
+        """returns the uptime of the bot"""
+        uptime = dt.now() - client.start_time
+
+        web_client.chat_postMessage(
+            channel=channel,
+            text=f"The bot has been active for: {uptime}"
+        )
+
+    if command == 'exit' or command == 'quit':
+        """Shuts the bot down"""
+        client.rtm_client.stop()
+
+
+    # "list": "list current twitter filters and counters",
+    # "add": "add some twitter keyword filters",
+    # "del": "Remove some twitter keyword filters"
+    # "clear": "Remove all twitter filters",
+    # "raise": "Manually test exception handler"
 
 def create_parser():
     logger_levels = " ".join([key for key in log_levels])

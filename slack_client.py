@@ -57,7 +57,7 @@ class SlackClient:
             channel=channel['id'],
             text="Whats up party people!"
         )
-    
+
     def get_channel_list(self):
         chan_list = self.web_client.channels_list()
 
