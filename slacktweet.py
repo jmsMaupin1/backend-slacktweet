@@ -45,7 +45,7 @@ class ClientInjector(object):
         return wrapped
 
 
-def slackbot_callback(client, command, data, channel, web_client):
+def slackbot_callback(client, command, data, channel, web_client, *args):
     """Callback method to handle commands emitted by the slackbot client"""
     if command == 'help':
         """Prints a list of commands"""
@@ -72,8 +72,22 @@ def slackbot_callback(client, command, data, channel, web_client):
         """Shuts the bot down"""
         client.rtm_client.stop()
 
+    if command == 'list':
+        """List current filter keywords"""
+        twitter_client = args[0]
+        web_client.chat_postMessage(
+            channel=channel,
+            text=twitter_client.filters
+        )
 
-    # "list": "list current twitter filters and counters",
+    if command == 'add':
+        """Add a keyword filter to twitter client"""
+        twitter_client = args[0]
+        filters = twitter_client.filters
+        filters.append(data)
+        twitter_client.update_filters(filters)
+
+
     # "add": "add some twitter keyword filters",
     # "del": "Remove some twitter keyword filters"
     # "clear": "Remove all twitter filters",
@@ -126,7 +140,9 @@ def main():
         for cmd in commands:
             slack_client.add_command(cmd, commands[cmd])
 
-        slack_client.add_callback(slackbot_callback)
+        slack_client.add_callback(
+            ClientInjector(tc)(slackbot_callback)
+        )
         tc.add_callback(slack_client.private_message_jt)
 
         slack_client.start_stream()
