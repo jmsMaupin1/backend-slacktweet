@@ -4,6 +4,7 @@ A Slackbot implementation that integrates Slack and Twitter clients
 together
 """
 import logging
+import logging.handlers
 import argparse
 from datetime import datetime as dt
 
@@ -54,7 +55,15 @@ def main():
     logging.basicConfig(
         level=logging.DEBUG,
         format='%(process)d - %(asctime)s - %(levelname)s - %(message)s',
-        datefmt='%y-%m-%d %H:%M:%S'
+        datefmt='%y-%m-%d %H:%M:%S',
+        handlers=[
+            logging.handlers.RotatingFileHandler(
+                'slacktweet-log.log',
+                maxBytes=50000,
+                backupCount=5
+            ),
+            logging.StreamHandler()
+        ]
     )
 
     app_start_time = dt.now()

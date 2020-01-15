@@ -9,7 +9,7 @@ import time
 from datetime import datetime as dt
 
 from dotenv import load_dotenv
-from slack import RTMClient, WebClient
+from slack import RTMClient
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -24,9 +24,10 @@ class SlackClient:
     def __init__(self):
         token = os.environ['SLACK_BOT_TOKEN']
         self.rtm_client = RTMClient(token=token, run_async=True)
+        self.future = self.rtm_client.start()
+        self.vomit_channel = "#bestslackbot-room"
         self.web_client = None
         self.id = None
-        self.future = self.rtm_client.start()
         self.start_time = None
         self.command_callback = None
         self.commands = {}
@@ -56,6 +57,9 @@ class SlackClient:
             channel=channel['id'],
             text="Whats up party people!"
         )
+    
+    def get_channel_list(self):
+        chan_list = self.web_client.channels_list()
 
     def add_command(self, command, help_str):
         """Adds commands to listen for and a help message"""
