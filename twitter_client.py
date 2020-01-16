@@ -26,17 +26,19 @@ class TwitterClient(tweepy.StreamListener):
     """
     def __init__(self, filters):
         self.filters = filters
-        self.tweets = []
         self.api = self.create_api()
+        self.tweets = []
+        self.processed_tweets_count = 0
+        self.start_time = None
         self.callback = None
         self.stream = tweepy.Stream(
             auth=self.api.auth,
             listener=self,
             daemon=True,
         )
-        self.start_time = dt.now()
 
     def __enter__(self):
+        self.start_time = dt.now()
         self.start_stream()
         return self
 
@@ -61,7 +63,6 @@ class TwitterClient(tweepy.StreamListener):
 
         try:
             logger.debug("Starting Twitter Stream")
-            print(list(self.filters.keys()))
             self.stream.filter(track=list(self.filters.keys()), is_async=True)
         except Exception as e:
             logger.error(f"Failed to start stream: {e}")
@@ -99,10 +100,23 @@ class TwitterClient(tweepy.StreamListener):
         """
         if 'retweeted_status' in status.__dict__:
             return
-        logger.info(status)
 
-        if self.callback:
-            self.callback(status.text)
+        for keyword in self.filters:
+            if keyword in status.text:
+                self.processed_tweets_count += 1
+                self.filters[keyword] += 1
+                if self.callback:
+                    self.callback(status.text)
+                return
+
+    def get_tweet_stats(self):
+        up_time = (dt.now() - self.start_time).total_seconds() / 60
+        tweets_per_minute = self.processed_tweets_count / up_time
+        return {
+            "tweets_per_minute": tweets_per_minute,
+            "filter_count": self.filters,
+            "total_tweets_processed": self.processed_tweets_count
+        }
 
     def on_error(self, error):
         """Exit stream if we are rate limited, otherwise continue"""
@@ -111,45 +125,3 @@ class TwitterClient(tweepy.StreamListener):
             return False
 
         logger.error(f"Unhandled Error: {error}")
-
-
-def main():
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(process)d - %(asctime)s - %(levelname)s - %(message)s',
-        datefmt='%y-%m-%d %H:%M:%S'
-    )
-
-    app_start_time = dt.now()
-
-    logging.info(
-        '\n'
-        '--------------------------------------------------\n'
-        '      Running: {}\n'
-        '      started on: {}\n'
-        '--------------------------------------------------\n'
-        .format(__file__, app_start_time.isoformat())
-    )
-
-    with TwitterClient(['trump']) as tclient:
-        time.sleep(5)
-        tclient.update_filters(['iran'])
-        time.sleep(5)
-        print(tclient.get_tweets())
-        print(tclient.tweets)
-        tclient.close_stream()
-
-    uptime = dt.now() - app_start_time
-    logging.info(
-        '\n'
-        '--------------------------------------------------\n'
-        '      Running: {}\n'
-        '      stopped on: {}\n'
-        '--------------------------------------------------\n'
-        .format(__file__, str(uptime))
-    )
-    logging.shutdown()
-
-
-if __name__ == '__main__':
-    main()

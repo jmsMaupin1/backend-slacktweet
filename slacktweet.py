@@ -129,6 +129,7 @@ def create_parser():
 def main():
     parser = create_parser()
     args = parser.parse_args()
+    stats = None
 
     if not args.loglevel:
         parser.print_help()
@@ -171,15 +172,21 @@ def main():
         tc.add_callback(slack_client.private_message_jt)
 
         slack_client.start_stream()
+        stats = tc.get_tweet_stats()
 
+    tweets_per_second = stats['tweets_per_second']
+    filter_count = stats['filter_count']
+    tweet_count = stats['total_tweets_processed']
     uptime = dt.now() - app_start_time
     logging.info(
         '\n'
         '--------------------------------------------------\n'
-        '      Running: {}\n'
-        '      stopped on: {}\n'
+        f'tweets per second: {tweets_per_second}\n'
+        f'filter count: {filter_count}\n'
+        f'total tweets processed: {tweet_count}\n'
+        f'Running: {__file__}\n'
+        f'stopped on: {uptime}\n'
         '--------------------------------------------------\n'
-        .format(__file__, str(uptime))
     )
     logging.shutdown()
 

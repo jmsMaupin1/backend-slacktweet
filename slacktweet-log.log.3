@@ -1,0 +1,384 @@
+7455 - 20-01-16 12:35:12 - INFO - 
+--------------------------------------------------
+      Running: /media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slacktweet.py
+      started on: 2020-01-16T12:35:12.493173
+--------------------------------------------------
+
+7455 - 20-01-16 12:35:12 - DEBUG - Logging into Twitter API
+7455 - 20-01-16 12:35:12 - DEBUG - Using selector: EpollSelector
+7455 - 20-01-16 12:35:12 - DEBUG - Retrieving websocket info.
+7455 - 20-01-16 12:35:13 - DEBUG - Received the following response: {'ok': True, 'url': 'wss://cerberus-xxxx.lb.slack-msgs.com/websocket/Dwq0r5N6d09I4O9-asja1QfZAl0JKnO27muXnkZ38ujdxMXhBMV4ziZbyZTTXqTeUA5Jq6RX2Er9oJB9bUN2e1ArFhYyH7gmzjnzZxMbi7M=', 'team': {'id': 'TCDBX31NH', 'name': 'KenzieBot', 'domain': 'kenziebot'}, 'self': {'id': 'US2URNDB3', 'name': 'bestslackbot'}}
+7455 - 20-01-16 12:35:13 - DEBUG - The Websocket connection has been opened.
+7455 - 20-01-16 12:35:13 - DEBUG - Running 1 callbacks for event: 'hello'
+7455 - 20-01-16 12:35:13 - DEBUG - Using selector: EpollSelector
+7455 - 20-01-16 12:35:14 - DEBUG - Received the following response: {'ok': True, 'url': 'https://kenziebot.slack.com/', 'team': 'KenzieBot', 'user': 'bestslackbot', 'team_id': 'TCDBX31NH', 'user_id': 'US2URNDB3', 'bot_id': 'BS0CA5N3U', 'warning': 'superfluous_charset', 'response_metadata': {'warnings': ['superfluous_charset']}}
+7455 - 20-01-16 12:36:03 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:03 - INFO - DSD690213
+7455 - 20-01-16 12:36:03 - DEBUG - Updating twitter filter keywords
+7455 - 20-01-16 12:36:03 - DEBUG - Restarting the twitter stream
+7455 - 20-01-16 12:36:03 - DEBUG - Disoconnecting Stream
+7455 - 20-01-16 12:36:03 - DEBUG - Starting Twitter Stream
+7455 - 20-01-16 12:36:03 - DEBUG - Signing request <PreparedRequest [POST]> using client <Client client_key=JOwzpbrE9uCvoe5ICltEX8Y3P, client_secret=****, resource_owner_key=749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr, resource_owner_secret=****, signature_method=HMAC-SHA1, signature_type=AUTH_HEADER, callback_uri=None, rsa_key=None, verifier=None, realm=None, encoding=utf-8, decoding=None, nonce=None, timestamp=None>
+7455 - 20-01-16 12:36:03 - DEBUG - Including body in call to sign: True
+7455 - 20-01-16 12:36:03 - DEBUG - Collected params: [('delimited', 'length'), ('oauth_nonce', '13780265650545797211579196163'), ('oauth_timestamp', '1579196163'), ('oauth_version', '1.0'), ('oauth_signature_method', 'HMAC-SHA1'), ('oauth_consumer_key', 'JOwzpbrE9uCvoe5ICltEX8Y3P'), ('oauth_token', '749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr'), ('track', 'test')]
+7455 - 20-01-16 12:36:03 - DEBUG - Normalized params: delimited=length&oauth_consumer_key=JOwzpbrE9uCvoe5ICltEX8Y3P&oauth_nonce=13780265650545797211579196163&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1579196163&oauth_token=749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr&oauth_version=1.0&track=test
+7455 - 20-01-16 12:36:03 - DEBUG - Normalized URI: https://stream.twitter.com/1.1/statuses/filter.json
+7455 - 20-01-16 12:36:03 - DEBUG - Signing: signature base string: POST&https%3A%2F%2Fstream.twitter.com%2F1.1%2Fstatuses%2Ffilter.json&delimited%3Dlength%26oauth_consumer_key%3DJOwzpbrE9uCvoe5ICltEX8Y3P%26oauth_nonce%3D13780265650545797211579196163%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1579196163%26oauth_token%3D749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr%26oauth_version%3D1.0%26track%3Dtest
+7455 - 20-01-16 12:36:03 - DEBUG - Signature: v3f5zT1ifv+XkdP/fpwnY+5FfrE=
+7455 - 20-01-16 12:36:03 - DEBUG - Updated url: https://stream.twitter.com/1.1/statuses/filter.json?delimited=length
+7455 - 20-01-16 12:36:03 - DEBUG - Updated headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': '10', 'Authorization': 'OAuth oauth_nonce="13780265650545797211579196163", oauth_timestamp="1579196163", oauth_version="1.0", oauth_signature_method="HMAC-SHA1", oauth_consumer_key="JOwzpbrE9uCvoe5ICltEX8Y3P", oauth_token="749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr", oauth_signature="v3f5zT1ifv%2BXkdP%2FfpwnY%2B5FfrE%3D"'}
+7455 - 20-01-16 12:36:03 - DEBUG - Updated body: 'track=test'
+7455 - 20-01-16 12:36:03 - DEBUG - Starting new HTTPS connection (1): stream.twitter.com:443
+7455 - 20-01-16 12:36:04 - DEBUG - https://stream.twitter.com:443 "POST /1.1/statuses/filter.json?delimited=length HTTP/1.1" 200 None
+7455 - 20-01-16 12:36:07 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:07 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196165.000500', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@NicolasEdny I thought I had a black great grandfather until a year ago when my aunt took a DNA test. \n\nThe whole family thought it.', 'ts': '1579196165.000500', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:08 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:08 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196168.000600', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'test test 123', 'ts': '1579196168.000600', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:09 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:09 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196169.000700', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@INCORRECTMINNIE Idk after that math test :eyes:', 'ts': '1579196169.000700', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:11 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:11 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196171.000900', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'test', 'ts': '1579196171.000900', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:11 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:11 - INFO - DSD690213
+7455 - 20-01-16 12:36:11 - DEBUG - Updating twitter filter keywords
+7455 - 20-01-16 12:36:11 - DEBUG - Restarting the twitter stream
+7455 - 20-01-16 12:36:11 - DEBUG - Disoconnecting Stream
+7455 - 20-01-16 12:36:11 - DEBUG - Starting Twitter Stream
+7455 - 20-01-16 12:36:11 - DEBUG - Signing request <PreparedRequest [POST]> using client <Client client_key=JOwzpbrE9uCvoe5ICltEX8Y3P, client_secret=****, resource_owner_key=749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr, resource_owner_secret=****, signature_method=HMAC-SHA1, signature_type=AUTH_HEADER, callback_uri=None, rsa_key=None, verifier=None, realm=None, encoding=utf-8, decoding=None, nonce=None, timestamp=None>
+7455 - 20-01-16 12:36:11 - DEBUG - Including body in call to sign: True
+7455 - 20-01-16 12:36:11 - DEBUG - Collected params: [('delimited', 'length'), ('oauth_nonce', '106941099999649212961579196171'), ('oauth_timestamp', '1579196171'), ('oauth_version', '1.0'), ('oauth_signature_method', 'HMAC-SHA1'), ('oauth_consumer_key', 'JOwzpbrE9uCvoe5ICltEX8Y3P'), ('oauth_token', '749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr'), ('track', 'test,trump')]
+7455 - 20-01-16 12:36:11 - DEBUG - Normalized params: delimited=length&oauth_consumer_key=JOwzpbrE9uCvoe5ICltEX8Y3P&oauth_nonce=106941099999649212961579196171&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1579196171&oauth_token=749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr&oauth_version=1.0&track=test%2Ctrump
+7455 - 20-01-16 12:36:11 - DEBUG - Normalized URI: https://stream.twitter.com/1.1/statuses/filter.json
+7455 - 20-01-16 12:36:11 - DEBUG - Signing: signature base string: POST&https%3A%2F%2Fstream.twitter.com%2F1.1%2Fstatuses%2Ffilter.json&delimited%3Dlength%26oauth_consumer_key%3DJOwzpbrE9uCvoe5ICltEX8Y3P%26oauth_nonce%3D106941099999649212961579196171%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1579196171%26oauth_token%3D749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr%26oauth_version%3D1.0%26track%3Dtest%252Ctrump
+7455 - 20-01-16 12:36:11 - DEBUG - Signature: JzrRXqUaKafdKBdrVghKz9XtzJk=
+7455 - 20-01-16 12:36:11 - DEBUG - Updated url: https://stream.twitter.com/1.1/statuses/filter.json?delimited=length
+7455 - 20-01-16 12:36:11 - DEBUG - Updated headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Cookie': 'guest_id=v1%3A157919616451214047; personalization_id="v1_2PEh9iq5rnWzivuCx8QZ1g=="', 'Content-Length': '18', 'Authorization': 'OAuth oauth_nonce="106941099999649212961579196171", oauth_timestamp="1579196171", oauth_version="1.0", oauth_signature_method="HMAC-SHA1", oauth_consumer_key="JOwzpbrE9uCvoe5ICltEX8Y3P", oauth_token="749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr", oauth_signature="JzrRXqUaKafdKBdrVghKz9XtzJk%3D"'}
+7455 - 20-01-16 12:36:11 - DEBUG - Updated body: 'track=test%2Ctrump'
+7455 - 20-01-16 12:36:11 - DEBUG - Starting new HTTPS connection (2): stream.twitter.com:443
+7455 - 20-01-16 12:36:12 - DEBUG - https://stream.twitter.com:443 "POST /1.1/statuses/filter.json?delimited=length HTTP/1.1" 200 None
+7455 - 20-01-16 12:36:12 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:12 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196172.001100', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'The only difference is through a miracle, we actually occasionally test these recommendations, and they fail nearly… <https://t.co/j7DlK6G0Ej>', 'ts': '1579196172.001100', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:13 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:13 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196173.001200', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'i just tried my moms blood pressure test \n\nand i got 88/57', 'ts': '1579196173.001200', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:13 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:13 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:13 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196173.001400', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': "@hopeltr yea girl, you know she played hella favorites!! she literally was like 'ok with these test scores and that… <https://t.co/uZZmxeToKh>", 'ts': '1579196173.001400', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:14 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:14 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196174.001600', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'The Latest: Pelosi says Trump has options for State of Union <https://t.co/DOJhrVHIQ6>', 'ts': '1579196174.001600', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:14 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:14 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:14 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196174.001800', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': "Dequan Townsend opens up about positive test for cocaine, fentanyl: 'I don't judge nobody' #News #UFC #Breaking… <https://t.co/wif7wXk9vV>", 'ts': '1579196174.001800', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:15 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:15 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196175.001900', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'Movies and video games test my patience, I hate clubs, I hate bars, and I keep tryna be open minded but like it’s not worth it', 'ts': '1579196175.001900', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:16 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:16 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196176.002000', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'have a stats test in a few mins :( i’m so nervous', 'ts': '1579196176.002000', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:16 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:16 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196176.002100', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'bsk presentasi buat test lab tp suara gue makin serak:)', 'ts': '1579196176.002100', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:17 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:17 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:17 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196177.002300', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '| mas o menos una coge práctica pero no te voy a mentir en este test maybe te saco un 4,5:clown_face:', 'ts': '1579196177.002300', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:18 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:18 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196178.002400', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': "Yo: bfff tengo que estudiar mucho!!!\nFacebook: con que fruta te identificas? Haz el test!\nYo: Let's do this :grin::grin::grin::grin:\nAp… <https://t.co/aIbaV344IG>", 'ts': '1579196178.002400', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:18 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:18 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196178.002500', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'Los resultados de mi test de patología de Pooh me hacen Tigger. <https://t.co/lH88fUHqho> vía @idr_labs', 'ts': '1579196178.002500', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:19 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:19 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:19 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196179.002600', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@MingGao26 Are you referring to the trump MOB GOP? \n\nNO. QUESTION.\n\n(and you don’t know how horrifying it is for me… <https://t.co/bzJtzcO5IO>', 'ts': '1579196179.002600', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:20 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:20 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196180.002800', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'i just tried my moms blood pressure test \n\nand i got 88/57', 'ts': '1579196180.002800', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:20 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:20 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:20 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196180.003000', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'can u drop some namseok pics or any bts pics i’m tryna power through learning my entire text book for my test tomorrow 🥺', 'ts': '1579196180.003000', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:21 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:21 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196181.003100', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'Movies and video games test my patience, I hate clubs, I hate bars, and I keep tryna be open minded but like it’s not worth it', 'ts': '1579196181.003100', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:21 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:21 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196181.003200', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '2 dhuvahu test kuri emmen ves himabissah negative\n<https://t.co/rMjBjhcH9B>', 'ts': '1579196181.003200', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:22 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:22 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196182.003400', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@liliofpuppets2 Pour en avoir fait l’année dernière: je ne te le conseille pas, j’ai détesté et ça m’a occasionné beaucoup d’angoisse:exploding_head:', 'ts': '1579196182.003400', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:23 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:23 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196183.003500', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@DonaldJTrumpJr @realDonaldTrump Today we saw trump being impeached. The trumps are a stain on American democracy', 'ts': '1579196183.003500', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:23 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:23 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196183.003600', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'bsk presentasi buat test lab tp suara gue makin serak:)', 'ts': '1579196183.003600', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:24 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:24 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196184.003700', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'maaga pa test tomorla', 'ts': '1579196184.003700', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:25 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:25 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196185.003800', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': "Yo: bfff tengo que estudiar mucho!!!\nFacebook: con que fruta te identificas? Haz el test!\nYo: Let's do this :grin::grin::grin::grin:\nAp… <https://t.co/aIbaV344IG>", 'ts': '1579196185.003800', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:25 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:25 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196185.003900', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@teaddi1299 @Acemal71 @TUSAS_EN Bu sene sonu test uçuşu yapçak temel kotil açıkladı', 'ts': '1579196185.003900', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:26 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:26 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196186.004000', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'can u drop some namseok pics or any bts pics i’m tryna power through learning my entire text book for my test tomorrow 🥺', 'ts': '1579196186.004000', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:26 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:26 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196186.004100', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@CharlieDaniels I can only imagine what you would say if trump were a Democrat. Your partisanship is shameful.', 'ts': '1579196186.004100', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:27 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:27 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196187.004200', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '2 dhuvahu test kuri emmen ves himabissah negative\n<https://t.co/rMjBjhcH9B>', 'ts': '1579196187.004200', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:27 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:27 - INFO - DSD690213
+7455 - 20-01-16 12:36:27 - DEBUG - Updating twitter filter keywords
+7455 - 20-01-16 12:36:27 - DEBUG - Restarting the twitter stream
+7455 - 20-01-16 12:36:27 - DEBUG - Disoconnecting Stream
+7455 - 20-01-16 12:36:27 - DEBUG - Starting Twitter Stream
+7455 - 20-01-16 12:36:27 - DEBUG - Signing request <PreparedRequest [POST]> using client <Client client_key=JOwzpbrE9uCvoe5ICltEX8Y3P, client_secret=****, resource_owner_key=749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr, resource_owner_secret=****, signature_method=HMAC-SHA1, signature_type=AUTH_HEADER, callback_uri=None, rsa_key=None, verifier=None, realm=None, encoding=utf-8, decoding=None, nonce=None, timestamp=None>
+7455 - 20-01-16 12:36:27 - DEBUG - Including body in call to sign: True
+7455 - 20-01-16 12:36:27 - DEBUG - Collected params: [('delimited', 'length'), ('oauth_nonce', '131386346299853471211579196187'), ('oauth_timestamp', '1579196187'), ('oauth_version', '1.0'), ('oauth_signature_method', 'HMAC-SHA1'), ('oauth_consumer_key', 'JOwzpbrE9uCvoe5ICltEX8Y3P'), ('oauth_token', '749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr'), ('track', 'test,trump,quantum')]
+7455 - 20-01-16 12:36:27 - DEBUG - Normalized params: delimited=length&oauth_consumer_key=JOwzpbrE9uCvoe5ICltEX8Y3P&oauth_nonce=131386346299853471211579196187&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1579196187&oauth_token=749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr&oauth_version=1.0&track=test%2Ctrump%2Cquantum
+7455 - 20-01-16 12:36:27 - DEBUG - Normalized URI: https://stream.twitter.com/1.1/statuses/filter.json
+7455 - 20-01-16 12:36:27 - DEBUG - Signing: signature base string: POST&https%3A%2F%2Fstream.twitter.com%2F1.1%2Fstatuses%2Ffilter.json&delimited%3Dlength%26oauth_consumer_key%3DJOwzpbrE9uCvoe5ICltEX8Y3P%26oauth_nonce%3D131386346299853471211579196187%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1579196187%26oauth_token%3D749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr%26oauth_version%3D1.0%26track%3Dtest%252Ctrump%252Cquantum
+7455 - 20-01-16 12:36:27 - DEBUG - Signature: MO91E5CiKEG1SqF07iWcIi/H2lw=
+7455 - 20-01-16 12:36:27 - DEBUG - Updated url: https://stream.twitter.com/1.1/statuses/filter.json?delimited=length
+7455 - 20-01-16 12:36:27 - DEBUG - Updated headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Cookie': 'guest_id=v1%3A157919616451214047; personalization_id="v1_2PEh9iq5rnWzivuCx8QZ1g=="', 'Content-Length': '28', 'Authorization': 'OAuth oauth_nonce="131386346299853471211579196187", oauth_timestamp="1579196187", oauth_version="1.0", oauth_signature_method="HMAC-SHA1", oauth_consumer_key="JOwzpbrE9uCvoe5ICltEX8Y3P", oauth_token="749662466909483008-0TpJYmNnVchFFZXt8GK42Vog97H9BEr", oauth_signature="MO91E5CiKEG1SqF07iWcIi%2FH2lw%3D"'}
+7455 - 20-01-16 12:36:27 - DEBUG - Updated body: 'track=test%2Ctrump%2Cquantum'
+7455 - 20-01-16 12:36:27 - DEBUG - Starting new HTTPS connection (3): stream.twitter.com:443
+7455 - 20-01-16 12:36:28 - DEBUG - https://stream.twitter.com:443 "POST /1.1/statuses/filter.json?delimited=length HTTP/1.1" 200 None
+7455 - 20-01-16 12:36:28 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:28 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196188.004400', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': "S*** #red sever test Let's test vulgarity.", 'ts': '1579196188.004400', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:28 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:28 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:28 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196188.004500', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@politico trump has them all afraid. I don’t want America afraid of its government', 'ts': '1579196188.004500', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:28 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:28 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:29 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196188.004600', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'maaga pa test tomorla', 'ts': '1579196188.004600', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:29 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:29 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:29 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196189.004700', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@aaminah_97 @sucre_mack I once passed a Liam Payne challenge online even though the test was in Spanish and I had n… <https://t.co/93IWQT2753>', 'ts': '1579196189.004700', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:29 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:30 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:30 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:30 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:30 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:30 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:30 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:30 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:30 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:30 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:30 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:30 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.004800', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@CalebJHull @mkraju Haha what a embarrassment lol\nThe trump defending deplorable are unhinged and it’s not looking good for trump lol', 'ts': '1579196190.004800', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.004900', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': ":sparkles:Mental illness doesn't excuse you from being an asshole and using it as a trump card when someone calls you out is… <https://t.co/52oEYbJ2QM>", 'ts': '1579196190.004900', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:30 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.005000', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@IvankaTrump @realDonaldTrump Another trump fool!!!', 'ts': '1579196190.005000', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.005200', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@teaddi1299 @Acemal71 @TUSAS_EN Bu sene sonu test uçuşu yapçak temel kotil açıkladı', 'ts': '1579196190.005200', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.005300', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'Just set up my drug test to start my externship in the pharmacy! God is blessing me this 2020:pray::skin-tone-5::pray::skin-tone-5::pray::skin-tone-5: @ Charleston, S… <https://t.co/E7dFxnc49S>', 'ts': '1579196190.005300', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.005400', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@aaminah_97 @sucre_mack I once passed a Liam Payne challenge online even though the test was in Spanish and I had n… <https://t.co/93IWQT2753>', 'ts': '1579196190.005400', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.005500', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': 'Does Mahomes really "pass" the eye test? :joy:', 'ts': '1579196190.005500', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.005800', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@grislyeye experiments made it out of editors rooms and playtests. We create, we test, we innovate, we improve. But… <https://t.co/tKVmWOZSXS>', 'ts': '1579196190.005800', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.005900', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@Loves_AMH Nah I don’t think people think he’s racist just don’t support or believe in the character of who he possibly supports. I.e trump.', 'ts': '1579196190.005900', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:30 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.005700', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': "S*** #red sever test Let's test vulgarity.", 'ts': '1579196190.005700', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:30 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.006300', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@rupinjapan @NASA The trump admin has barred any mention of climate change withany government organizations, wouldn… <https://t.co/BfvwUcpGtQ>', 'ts': '1579196190.006300', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:31 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.006100', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '“i shouldve just taken my damn test instead of bullying” <https://t.co/esaRFu2pX8>', 'ts': '1579196190.006100', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:31 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.006200', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@WorldofKeralis If you want to test the machine. Do a fur mark benchmark test', 'ts': '1579196190.006200', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:31 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.006000', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': "@FUNTlMEZ The rest of us who didn't pass the test (that was 100% of the note because he wanted)  got really depress… <https://t.co/4VHSkgkvqk>", 'ts': '1579196190.006000', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:31 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196190.005600', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': "@pr3ttygorgeouss Sis u ain't heard they selling our DNA to the feds when we do them test", 'ts': '1579196190.005600', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:31 - ERROR -  Slack - Unhandled Exception: This event loop is already running
+Traceback (most recent call last):
+  File "/media/jt/JT's SSHD/Kenzie/quarter3/backend-slacktweet/slack_client.py", line 132, in private_message_jt
+    text=text
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/client.py", line 559, in chat_postMessage
+    return self.api_call("chat.postMessage", json=kwargs)
+  File "/home/jt/.local/share/virtualenvs/backend-slacktweet-8puf694V/lib/python3.7/site-packages/slack/web/base_client.py", line 171, in api_call
+    return self._event_loop.run_until_complete(future)
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 570, in run_until_complete
+    self.run_forever()
+  File "/usr/lib/python3.7/asyncio/base_events.py", line 525, in run_forever
+    raise RuntimeError('This event loop is already running')
+RuntimeError: This event loop is already running
+7455 - 20-01-16 12:36:31 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:31 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196191.006400', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '“i shouldve just taken my damn test instead of bullying” <https://t.co/esaRFu2pX8>', 'ts': '1579196191.006400', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
+7455 - 20-01-16 12:36:31 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:32 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:32 - DEBUG - Running 1 callbacks for event: 'message'
+7455 - 20-01-16 12:36:32 - DEBUG - Received the following response: {'ok': True, 'channel': 'DSD690213', 'ts': '1579196191.006600', 'message': {'type': 'message', 'subtype': 'bot_message', 'text': '@JFKLibrary @POTUS President Donald Trump! America’s greatest President.', 'ts': '1579196191.006600', 'username': 'Best-Slack-Bot', 'bot_id': 'BS0CA5N3U'}}
