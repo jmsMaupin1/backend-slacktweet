@@ -5,6 +5,7 @@ together
 """
 import logging
 import logging.handlers
+import signal
 import argparse
 from datetime import datetime as dt
 
@@ -12,6 +13,11 @@ from slack_client import SlackClient
 from twitter_client import TwitterClient
 
 logger = logging.getLogger(__name__)
+
+sig_dict = dict(
+    (k, v) for v, k in reversed(sorted(signal.__dict__.items()))
+    if v.startswith('SIG') and not v.startswith('SIG_')
+)
 
 commands = {
     "help": "Prints a helpful message",
@@ -84,26 +90,30 @@ def slackbot_callback(client, command, data, channel, web_client, *args):
         """Add a keyword filter to twitter client"""
         twitter_client = args[0]
         filters = twitter_client.filters
-        filters.append(data)
+        filters[data] = 0
         twitter_client.update_filters(filters)
 
     if command == 'del':
         """Remove a keyword filter from twitter client"""
         twitter_client = args[0]
         filters = twitter_client.filters
-        filter_index = filters.index(data)
-        if filter_index >= 0:
-            filters.pop(filter_index)
-
+        filters.pop(data)
         twitter_client.update_filters(filters)
 
     if command == 'clear':
         """Remove all keyword filters from twitter client"""
         twitter_client = args[0]
-        twitter_client.update_filters([])
+        twitter_client.update_filters({})
 
     if command == 'raise':
         client.raise_exception(data, channel)
+
+
+def signal_handler(sig_num, loop):
+    logger.warn(
+        'Received OS process signal: {}'
+        .format(sig_dict[sig_num])
+    )
 
 
 def create_parser():
@@ -148,10 +158,12 @@ def main():
         .format(__file__, app_start_time.isoformat())
     )
 
-    with TwitterClient([]) as tc:
+    with TwitterClient({}) as tc:
         slack_client = SlackClient()
         for cmd in commands:
             slack_client.add_command(cmd, commands[cmd])
+
+        signal.signal(signal.SIGINT, signal_handler)
 
         slack_client.add_callback(
             ClientInjector(tc)(slackbot_callback)

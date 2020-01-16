@@ -61,7 +61,8 @@ class TwitterClient(tweepy.StreamListener):
 
         try:
             logger.debug("Starting Twitter Stream")
-            self.stream.filter(track=self.filters, is_async=True)
+            print(list(self.filters.keys()))
+            self.stream.filter(track=list(self.filters.keys()), is_async=True)
         except Exception as e:
             logger.error(f"Failed to start stream: {e}")
 
@@ -98,7 +99,7 @@ class TwitterClient(tweepy.StreamListener):
         """
         if 'retweeted_status' in status.__dict__:
             return
-        logger.info(status.text)
+        logger.info(status)
 
         if self.callback:
             self.callback(status.text)
