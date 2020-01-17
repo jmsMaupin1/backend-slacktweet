@@ -5,7 +5,6 @@ see https://slack.dev/python-slackclient/
 import os
 import re
 import logging
-from pprint import pprint
 import time
 from datetime import datetime as dt
 
@@ -26,7 +25,7 @@ class SlackClient:
         token = os.environ['SLACK_BOT_TOKEN']
         self.rtm_client = RTMClient(token=token, run_async=True)
         self.future = self.rtm_client.start()
-        self.vomit_channel = None
+        self.emit_channel = None
         self.web_client = None
         self.id = None
         self.start_time = None
@@ -54,25 +53,24 @@ class SlackClient:
 
     def channel_joined(self, **kwargs):
         """When joining a channel emit a hello message"""
-        web_client = kwargs['web_client']
         channel = kwargs['data']['channel']
-
-        web_client.chat_postMessage(
-            channel=channel['id'],
-            text="Whats up party people!"
-        )
+        self.send_message(channel['id'], 'Whats up party people!')
 
     def set_output_channel(self, channel_to_set, channel):
         channels = self.get_channel_list()['channels']
         member_channels = [c['name'] for c in channels if c['is_member']]
         names = '\n'.join(member_channels)
+        if channel_to_set.startswith('<#'):
+            bar_index = channel_to_set.index('|') + 1
+            channel_to_set = channel_to_set[bar_index:-1]
+
         if channel_to_set not in member_channels:
-            self.web_client.chat_postMessage(
-                channel=channel,
-                text=f"available channels: \n{names}"
-            )
+            self.send_message(channel, f"available channels: \n{names}")
         else:
-            self.vomit_channel = '#'+channel_to_set
+            if channel_to_set.startswith('#'):
+                self.emit_channel = channel_to_set
+            else:
+                self.emit_channel = '#'+channel_to_set
 
     def get_channel_list(self):
         chan_list = self.web_client.channels_list()
@@ -133,15 +131,15 @@ class SlackClient:
             except Exception as e:
                 logger.error(f'Unandled Exception: {e}')
         else:
-            self.web_client.chat_postMessage(
-                channel=channel,
-                text=f'Possible Exceptions: {" ".join(exceptions.keys())}'
+            self.send_message(
+                channel, 
+                f'Possible Exceptions: {" ".join(exceptions.keys())}'
             )
 
-    def send_message(self, text):
+    def send_message(self, channel, text):
         try:
             self.web_client.chat_postMessage(
-                channel=self.vomit_channel,
+                channel=channel,
                 text=text
             )
             time.sleep(1)

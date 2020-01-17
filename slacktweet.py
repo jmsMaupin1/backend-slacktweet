@@ -54,7 +54,7 @@ class ClientInjector(object):
 
 def twitterbot_callback(client, tweet, *args):
     slack_client = args[0]
-    slack_client.send_message(tweet)
+    slack_client.send_message(slack_client.emit_channel, tweet)
 
 
 def slackbot_callback(client, command, data, channel, web_client, *args):
