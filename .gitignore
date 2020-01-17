@@ -3,4 +3,7 @@
 .venv/
 venv/
 *.code-workspace
-*.log
+*.log*
+.todo
+playground.py
+__pycache__
