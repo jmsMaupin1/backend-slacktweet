@@ -107,6 +107,7 @@ class TwitterClient(tweepy.StreamListener):
                 self.filters[keyword] += 1
                 if self.callback:
                     self.callback(self, status.text)
+                    logger.debug(f'Tweet: {status.text}')
                 return
 
     def get_tweet_stats(self):
