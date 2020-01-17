@@ -57,7 +57,7 @@ def twitterbot_callback(client, tweet, *args):
     slack_client.send_message(slack_client.emit_channel, tweet)
 
 
-def slackbot_callback(client, command, data, channel, web_client, *args):
+def slackbot_callback(client, command, data, channel, *args):
     """Callback method to handle commands emitted by the slackbot client"""
     if command == 'help':
         """Prints a list of commands"""
@@ -66,7 +66,7 @@ def slackbot_callback(client, command, data, channel, web_client, *args):
             help_s += f"{cmd}: {client.commands[cmd]}\n"
         help_s += '```'
 
-        web_client.chat_postMessage(
+        client.send_message(
             channel=channel,
             text=help_s
         )
@@ -75,7 +75,7 @@ def slackbot_callback(client, command, data, channel, web_client, *args):
         """returns the uptime of the bot"""
         uptime = dt.now() - client.start_time
 
-        web_client.chat_postMessage(
+        client.send_message(
             channel=channel,
             text=f"The bot has been active for: {uptime}"
         )
@@ -87,7 +87,7 @@ def slackbot_callback(client, command, data, channel, web_client, *args):
     if command == 'list':
         """List current filter keywords"""
         twitter_client = args[0]
-        web_client.chat_postMessage(
+        client.send_message(
             channel=channel,
             text=twitter_client.filters
         )

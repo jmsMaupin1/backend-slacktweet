@@ -91,15 +91,14 @@ class SlackClient:
         cmd = command.split(' ')
         if self.command_callback:
             if command in self.commands:
-                self.command_callback(self, command, '', channel, web_client)
+                self.command_callback(self, command, '', channel)
             elif cmd[0] in self.commands:
                 logger.debug(channel)
                 self.command_callback(
                     self,
                     cmd[0],
                     cmd[1],
-                    channel,
-                    web_client
+                    channel
                 )
 
     def read_message(self, **kwargs):
