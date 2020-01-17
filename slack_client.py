@@ -5,6 +5,7 @@ see https://slack.dev/python-slackclient/
 import os
 import re
 import logging
+from pprint import pprint
 import time
 from datetime import datetime as dt
 
@@ -25,7 +26,7 @@ class SlackClient:
         token = os.environ['SLACK_BOT_TOKEN']
         self.rtm_client = RTMClient(token=token, run_async=True)
         self.future = self.rtm_client.start()
-        self.vomit_channel = "#bestslackbot-room"
+        self.vomit_channel = None
         self.web_client = None
         self.id = None
         self.start_time = None
@@ -61,9 +62,21 @@ class SlackClient:
             text="Whats up party people!"
         )
 
+    def set_output_channel(self, channel_to_set, channel):
+        channels = self.get_channel_list()['channels']
+        member_channels = [c['name'] for c in channels if c['is_member']]
+        names = '\n'.join(member_channels)
+        if channel_to_set not in member_channels:
+            self.web_client.chat_postMessage(
+                channel=channel,
+                text=f"available channels: \n{names}"
+            )
+        else:
+            self.vomit_channel = '#'+channel_to_set
+
     def get_channel_list(self):
         chan_list = self.web_client.channels_list()
-        print(f'\n\n{chan_list}\n\n')
+        return chan_list
 
     def add_command(self, command, help_str):
         """Adds commands to listen for and a help message"""
@@ -82,7 +95,7 @@ class SlackClient:
             if command in self.commands:
                 self.command_callback(self, command, '', channel, web_client)
             elif cmd[0] in self.commands:
-                logger.info(channel)
+                logger.debug(channel)
                 self.command_callback(
                     self,
                     cmd[0],
@@ -125,12 +138,12 @@ class SlackClient:
                 text=f'Possible Exceptions: {" ".join(exceptions.keys())}'
             )
 
-    def private_message_jt(self, text):
+    def send_message(self, text):
         try:
             self.web_client.chat_postMessage(
-                channel='DSD690213',
+                channel=self.vomit_channel,
                 text=text
             )
             time.sleep(1)
         except Exception as e:
-            logger.exception(f" Slack - Unhandled Exception: {e}")
+            logger.warning(f' - Slack - Unhandled Exception: {e}')

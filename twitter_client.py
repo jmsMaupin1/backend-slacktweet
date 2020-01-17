@@ -50,7 +50,7 @@ class TwitterClient(tweepy.StreamListener):
         try:
             auth = tweepy.OAuthHandler(TWITTER_API_KEY, TWITTER_API_SECRET)
             auth.set_access_token(TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_SECRET)
-            logger.debug("Logging into Twitter API")
+            logger.info("Logging into Twitter API")
             return tweepy.API(auth)
         except Exception as e:
             logger.error(f"Failed to login to twitter: {e}")
@@ -62,19 +62,19 @@ class TwitterClient(tweepy.StreamListener):
             return
 
         try:
-            logger.debug("Starting Twitter Stream")
+            logger.info("Starting Twitter Stream")
             self.stream.filter(track=list(self.filters.keys()), is_async=True)
         except Exception as e:
             logger.error(f"Failed to start stream: {e}")
 
     def close_stream(self):
         """Disconnects from the twitter stream"""
-        logger.debug('Disoconnecting Stream')
+        logger.info('Disoconnecting Stream')
         self.stream.disconnect()
 
     def restart_stream(self):
         """Restarts the twitter stream"""
-        logger.debug('Restarting the twitter stream')
+        logger.info('Restarting the twitter stream')
         self.close_stream()
         self.start_stream()
 
@@ -106,7 +106,7 @@ class TwitterClient(tweepy.StreamListener):
                 self.processed_tweets_count += 1
                 self.filters[keyword] += 1
                 if self.callback:
-                    self.callback(status.text)
+                    self.callback(self, status.text)
                 return
 
     def get_tweet_stats(self):

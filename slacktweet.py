@@ -28,7 +28,8 @@ commands = {
     "add": "add some twitter keyword filters",
     "del": "Remove some twitter keyword filters",
     "clear": "Remove all twitter filters",
-    "raise": "Manually test exception handler"
+    "raise": "Manually test exception handler",
+    "channel": "Change channel on which the bot vomits filtered tweets"
 }
 
 log_levels = {
@@ -49,6 +50,11 @@ class ClientInjector(object):
         def wrapped(*args):
             function(*args, self.client)
         return wrapped
+
+
+def twitterbot_callback(client, tweet, *args):
+    slack_client = args[0]
+    slack_client.send_message(tweet)
 
 
 def slackbot_callback(client, command, data, channel, web_client, *args):
@@ -106,11 +112,19 @@ def slackbot_callback(client, command, data, channel, web_client, *args):
         twitter_client.update_filters({})
 
     if command == 'raise':
+        """
+        Manually raise an exception, if the user inputs a wrong selection
+        then send a list of possible exceptions
+        """
         client.raise_exception(data, channel)
+
+    if command == "channel":
+        """Change the channel on which the bot vomits filtered tweets"""
+        client.set_output_channel(data, channel)
 
 
 def signal_handler(sig_num, loop):
-    logger.warn(
+    logger.warning(
         'Received OS process signal: {}'
         .format(sig_dict[sig_num])
     )
@@ -169,19 +183,21 @@ def main():
         slack_client.add_callback(
             ClientInjector(tc)(slackbot_callback)
         )
-        tc.add_callback(slack_client.private_message_jt)
+        tc.add_callback(
+            ClientInjector(slack_client)(twitterbot_callback)
+        )
 
         slack_client.start_stream()
         stats = tc.get_tweet_stats()
 
-    tweets_per_second = stats['tweets_per_second']
+    tweets_per_minute = stats['tweets_per_minute']
     filter_count = stats['filter_count']
     tweet_count = stats['total_tweets_processed']
     uptime = dt.now() - app_start_time
     logging.info(
         '\n'
         '--------------------------------------------------\n'
-        f'tweets per second: {tweets_per_second}\n'
+        f'tweets per second: {tweets_per_minute}\n'
         f'filter count: {filter_count}\n'
         f'total tweets processed: {tweet_count}\n'
         f'Running: {__file__}\n'
