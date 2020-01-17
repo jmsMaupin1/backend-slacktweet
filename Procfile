@@ -1,1 +1,1 @@
-worker: python slacktweet.py -l debug
+python slacktweet.py -l debug
